@@ -56,3 +56,14 @@ void Escaneo (){
     }
   }
 }
+
+//But it has another problem:
+//PROBLEMSTARTPOINT:
+//if ( nDevices == 0) {
+    //Serial.print( "No devices found" );
+    //Serial.println("Scanning");
+    //delay(time_1); // that is, if no device is found, wait 30 seconds, and if still none, start waiting again
+                   // we need to track the time since the last scan. After that time has passed, check again if nDevices == 0
+                   // if so, print "No devices found" and restart the timer
+//}
+//PROBLEMFINISHPOINT

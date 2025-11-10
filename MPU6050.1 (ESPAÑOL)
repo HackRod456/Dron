@@ -1,0 +1,53 @@
+//1º: probar este código
+//2º: si hay fallos, corregirlos
+//3º: probar el de MPU6050
+//4º: si hay fallos, corregirlos, si no, implementar función de control en base a la inclinación
+//5º: pantalla
+
+#include <Wire.h>
+
+int time_1 = 30000;
+int BaudRate = 9600;
+
+void setup() {
+  // put your setup code here, to run once:
+  Wire.begin();
+  Wire.setClock( 100000 );
+  Serial.begin( 9600 );
+}
+
+void loop() {
+ // put your main code here, to run repeatedly:
+ int Tiempo = 10;
+ byte error, address; //qué tipo de variable es byte, por que se ponen dos variables juntas?
+ int nDevices = 0;
+ int Error_1 = 0;
+ int Error_2= 4;
+
+ if( !Serial ){ //Arduino Serial wait while(!Serial) site:arduino.cc, esto es para decir "Mientras que no esté listo para imprimir, "
+  delay(Tiempo);
+ }else{
+  for ( address=1; address < 127; address++ ) {
+    Wire.beginTransmission( address );
+    error = Wire.endTransmission();
+    if ( error == Error_1 ) {
+      Serial.print( "Dispositivo encontrado en dirección 0x" );
+      if ( address < 16 ) {//como que 16, no se suponía que está en hexadecimal? y no se suponía que eran 127 posibles direcciones?
+        Serial.print( "0" );
+        Serial.print( address, HEX ); //qué hace HEX aquí?
+        nDevices++;
+      }//Por qué 4?
+    }else if (error == Error_2) {
+      Serial.print( "Error desconocido en dirección 0x" );
+      //Que significa HEX?; Por qué se pone una coma al lado de address?
+      Serial.println( address, HEX );
+    }
+  }
+  if ( nDevices == 0) {
+    Serial.print( "No se encontraron dispositivos" );
+  }else{
+    Serial.print( "Escaneo completado" );
+    delay(time_1);
+  }
+ }
+}

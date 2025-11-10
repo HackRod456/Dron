@@ -1,3 +1,6 @@
+It has a problem: if no device is found, it keeps printing "No devices found" continuously until one is detected. But it does so without pause. A time margin needs to be added so that, if no device is found after a certain period, the message is printed. Meanwhile, it should only print “Scanning…” once, wait 30 seconds, and if no device is found in that time, print the message again — and repeat.
+
+I’ve rewritten the code by creating a function that contains the scanner logic, for better clarity and control.
 #include <Wire.h>
 
 int time_1 = 30000;

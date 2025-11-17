@@ -1,0 +1,12 @@
+   El ESP32 se puede programar por WiFi, 
+lo que me supone una ventaja, ya que puedo 
+actualizar sin necesidad de desmontar todo el
+dispositivo. 
+  Aún así, esto también supone un riesgo porque
+si no se toman medidas preventivas, se podrín dar 
+accesos no autorizados. PERO esto solo puede funcionar 
+si el atacante conoce la IP del ESP32 y la 
+contraseña para lograr la conexión. 
+
+Mantente atent@ si quieres saber cómo lo hice 
+y qué mejoras implementé! ;)

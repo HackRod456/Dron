@@ -1,0 +1,6 @@
+The ESP32 can be programmed by WiFi, which suposed me an
+advantage, since I can repair it without needing to disassemble 
+the whole thing. This would supose a disadvantage because anyone could
+access to it's code; BUT this can only work if the unwanted person 
+knew the IP of the ESP32 and knew the password to achieve the connection.
+I'll continue uploading new stuff, so do keep track! ;)

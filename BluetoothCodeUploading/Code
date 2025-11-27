@@ -1,0 +1,74 @@
+#include <BluetoothSerial.h>
+#include <Update.h>
+
+BluetoothSerial SerialBT;  // Bluetooth Serial Code
+String ActualCode = "";    // your code
+String CodeCommand = "Code";
+
+void setup() {
+  Serial.begin(115200);
+  SerialBT.begin("name");  // Starts Bluetooth with a name
+}
+
+void OTA() {
+  SerialBT.println("Waiting for firmware file via Bluetooth...");
+
+  // Waits for the first data packet
+  while (!SerialBT.available()) {
+    delay(100);
+  }
+
+  // Begin
+  if (!Update.begin(UPDATE_SIZE_UNKNOWN)) {
+    SerialBT.println("Failed to start OTA update.");
+    return;
+  }
+
+  size_t written = 0;
+  unsigned long lastDataTime = millis();
+
+  while (true) {
+    if (SerialBT.available()) {
+      uint8_t data = SerialBT.read();  // Read byte by byte
+      Update.write(&data, 1);
+      written++;
+      lastDataTime = millis();  // Reset timer
+    }
+
+    // Timeout if no data arrives in 5 seconds
+    if (millis() - lastDataTime > 5000) {
+      SerialBT.println("Timeout: No data received.");
+      Update.abort();
+      return;
+    }
+
+    // Check if the update finished
+    if (Update.isFinished()) {
+      break;
+    }
+  }
+
+  SerialBT.printf("Firmware received: %d bytes\n", written);
+
+  if (Update.end()) {
+    SerialBT.println("Firmware Installed! Restarting...");
+    ESP.restart();
+  } else {
+    SerialBT.println("Firmware Update Failed!");
+  }
+}
+
+void loop() {
+  if (SerialBT.available()) {
+    String command = SerialBT.readStringUntil('\n');
+
+    if (command == "OTA?") {
+      Serial.println("OTA Command Received! Ready for firmware...");
+      SerialBT.println("Send Firmware Now...");
+      OTA();
+    }
+    if (command == CodeCommand) {
+      SerialBT.println(ActualCode);
+    }
+  }
+}
